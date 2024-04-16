@@ -1,0 +1,30 @@
+private void btnRoommates_Click(object sender, EventArgs e)
+{
+    try
+    {
+        // xem thu ban cung phong la ai ?
+        string smallquery = $"select roomNo from Student where username = '{username}'";
+        DataSet ds = fn.getData(smallquery);
+        string roomNO = ds.Tables[0].Rows[0][0].ToString();
+        string query = $"select CONCAT_WS(' ',fname,mname,lname) as 'Họ và tên'," +
+            $" email as 'Email'," +
+            $" mobile as 'SĐT'" +
+            $" from Student" +
+            $" where roomNo = '" + roomNO + "'";
+        DataSet ds1 = fn.getData(query);
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            txbMSSV.Text = $"Danh sách thành viên phòng {roomNO}";
+            guna2DataGridView1.DataSource = ds1.Tables[0];
+        }
+        else
+        {
+            MessageBox.Show("Không có bạn cùng phòng !");
+        }
+    }
+    catch (Exception ex)
+    {
+        // Xử lý ngoại lệ ở đây
+        MessageBox.Show("Có lỗi xảy ra: " + ex.Message);
+    }
+}
